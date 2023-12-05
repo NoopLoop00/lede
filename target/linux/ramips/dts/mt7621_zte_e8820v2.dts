@@ -16,6 +16,10 @@
 		led-upgrade = &led_sys;
 		label-mac-device = &gmac0;
 	};
+	
+	chosen {
+		bootargs = "console=ttyS0,115200";
+	};
 
 	leds {
 		compatible = "gpio-leds";
@@ -54,7 +58,7 @@
 	flash@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
-		spi-max-frequency = <10000000>;
+		spi-max-frequency = <45000000>;
 		broken-flash-reset;
 
 		partitions {
@@ -75,34 +79,11 @@
 			};
 
 			factory: partition@40000 {
-				compatible = "nvmem-cells";
 				label = "factory";
 				reg = <0x40000 0x10000>;
-				#address-cells = <1>;
-				#size-cells = <1>;
 				read-only;
-
-				eeprom_factory_0: eeprom@0 {
-					reg = <0x0 0x400>;
-				};
-
-				eeprom_factory_8000: eeprom@8000 {
-					reg = <0x8000 0x200>;
-				};
-
-				macaddr_factory_4: macaddr@4 {
-					reg = <0x4 0x6>;
-				};
-
-				macaddr_factory_e000: macaddr@e000 {
-					reg = <0xe000 0x6>;
-				};
-
-				macaddr_factory_e006: macaddr@e006 {
-					reg = <0xe006 0x6>;
-				};
 			};
-
+			
 			partition@50000 {
 				compatible = "denx,uimage";
 				label = "firmware";
@@ -123,10 +104,6 @@
 		reg = <0x0000 0 0 0 0>;
 		mediatek,mtd-eeprom = <&factory 0x0000>;
 		mtd-mac-address = <&factory 0xe000>;
-
-		led {
-			led-active-low;
-		};
 	};
 };
 
@@ -136,11 +113,6 @@
 		mediatek,mtd-eeprom = <&factory 0x8000>;
 		mtd-mac-address = <&factory 0xe006>;
 		ieee80211-freq-limit = <5000000 6000000>;
-		led {
-			led-sources = <2>;
-			led-active-low;
-		};
-	};
 };
 
 
@@ -151,6 +123,14 @@
 &gsw {
 	mediatek,portmap = "llllw";
 	status = "okay";
+};
+
+&hnat {
+	mtketh-wan = "eth1";
+	mtketh-ppd = "eth0";
+	mtketh-lan = "eth0";
+	mtketh-max-gmac = <2>;
+	/delete-property/ mtkdsa-wan-port;
 };
 
 &switch0 {
