@@ -117,10 +117,9 @@
 };
 
 &pcie0 {
-	wifi@0,0 {
+	mt76@0,0 {
 		reg = <0x0000 0 0 0 0>;
-		nvmem-cells = <&eeprom_factory_0>, <&macaddr_factory_e000>;
-		nvmem-cell-names = "eeprom", "mac-address";
+		mediatek,mtd-eeprom = <&factory 0x0000>;
 
 		led {
 			led-active-low;
@@ -129,11 +128,9 @@
 };
 
 &pcie1 {
-	wifi@0,0 {
+	mt76@0,0 {
 		reg = <0x0000 0 0 0 0>;
-		nvmem-cells = <&eeprom_factory_8000>, <&macaddr_factory_e006>;
-		nvmem-cell-names = "eeprom", "mac-address";
-
+		mediatek,mtd-eeprom = <&factory 0x8000>;
 		ieee80211-freq-limit = <5000000 6000000>;
 		led {
 			led-sources = <2>;
