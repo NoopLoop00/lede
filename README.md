@@ -62,7 +62,7 @@ PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中�
 
    ```bash
   env:
-  REPO_URL: https://github.com/NoopLoop00/lede.git
+  REPO_URL: https://github.com/yourname/lede.git
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
   CONFIG_FILE: .config
