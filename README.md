@@ -5,6 +5,7 @@ Action库 https://github.com/P3TERX/Actions-OpenWrt
 源码 https://github.com/coolsnowwolf/lede
 
 dts https://github.com/siwind/openwrt/tree/master/target/linux/ramips/dts
+
 ## 进行Aciton准备工作
 
 1.因为源码中没有e8820v2的dts文件和机型定义，所以首先要将Action和源码folk，然后下载siwind大佬制作的dts文件，链接上面已经给到，将e8820v2的dts文件复制到源码/target/linux/ramips/dts内，然后编辑/target/linux/ramips/image下的mt7621.mk，在最后添加e8820v2的机型定义，如下:
@@ -57,7 +58,25 @@ PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中�
 
 ### 编辑Action库
 
-修改
+修改/.github/workflows/build-openwrt.yml文件:
+
+   ```bash
+  env:
+  REPO_URL: https://github.com/NoopLoop00/lede.git
+  REPO_BRANCH: master
+  FEEDS_CONF: feeds.conf.default
+  CONFIG_FILE: .config
+  DIY_P1_SH: diy-part1.sh
+  DIY_P2_SH: diy-part2.sh
+  UPLOAD_BIN_DIR: false
+  UPLOAD_FIRMWARE: true
+  UPLOAD_COWTRANSFER: false
+  UPLOAD_WETRANSFER: false
+  UPLOAD_RELEASE: false
+  TZ: Asia/Shanghai
+
+  # REPO_URL的值修改为你的源码仓库地址
+   ```
 
 ### 下面进行固件自定义，不推荐直接对.config进行编译，对小白来说很容易没选对依赖，我感觉没有物理机好用。
 
@@ -87,4 +106,4 @@ PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中�
    make menuconfig
    ```
 
-4. 由于我们是利用Aciton进行云编译，所以在make menuconfig之后，只要把lede文件夹下的.config文件上传到Actions-OpenWrt上就行了，之后就是常规的云编译步骤。
+4. 由于我们是利用Aciton进行云编译，所以在make menuconfig之后，只要把lede文件夹下的.config文件上传到Actions-OpenWrt上并覆盖原文件就行了，之后就是常规的云编译步骤。
