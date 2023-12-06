@@ -108,4 +108,6 @@ PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中�
    make menuconfig
    ```
 
+附上一份OpenWrt 编译 LuCI -> Applications 添加插件应用说明，https://www.right.com.cn/forum/thread-344825-1-1.html
+
 4. 由于我们是利用Aciton进行云编译，所以在make menuconfig之后，只要把lede文件夹下的.config文件上传到Actions-OpenWrt上并覆盖原文件就行了，之后就是常规的云编译步骤。
