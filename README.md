@@ -1,4 +1,6 @@
-# 首先感谢P3TERX、coolsnowwolf和siwind三位大佬的Aciton库、源码和dts
+# ZTE E8820v2固件编译
+
+首先感谢P3TERX、coolsnowwolf和siwind三位大佬的Aciton库、源码和dts
 
 Action库 https://github.com/P3TERX/Actions-OpenWrt
 
