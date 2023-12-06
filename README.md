@@ -1,28 +1,65 @@
-# 欢迎来到 Lean 的 LEDE 源码仓库
+# 首先感谢P3TERX、coolsnowwolf和siwind三位大佬的Aciton库、源码和dts
 
-I18N: [English](README_EN.md) | [简体中文](README.md)
+Action库 https://github.com/P3TERX/Actions-OpenWrt
 
-## 官方讨论群
-如有技术问题需要讨论或者交流，欢迎加入以下群：
-1. QQ 讨论群： Op固件技术研究群 ,号码 891659613 ，加群链接：[点击加入](https://jq.qq.com/?_wv=1027&k=XL8SK5aC "Op固件技术研究群")
-2. TG 讨论群： OP 编译官方大群 ，加群链接：[点击加入](https://t.me/JhKgAA6Hx1 "OP 编译官方大群")
+源码 https://github.com/coolsnowwolf/lede
 
-## 软路由介绍
+dts https://github.com/siwind/openwrt/tree/master/target/linux/ramips/dts
+## 进行Aciton准备工作
 
-硬酷R2 - N95/N300迷你四网HomeLab服务器
+1.因为源码中没有e8820v2的dts文件和机型定义，所以首先要将Action和源码folk，然后下载siwind大佬制作的dts文件，链接上面已经给到，将e8820v2的dts文件复制到源码/target/linux/ramips/dts内，然后编辑/target/linux/ramips/image下的mt7621.mk，在最后添加e8820v2的机型定义，如下:
 
-[商品介绍页面 - 硬酷科技（支持花呗）](https://item.taobao.com/item.htm?id=721197662185)
+   ```bash
+   define Device/zte_e8820v2
+     $(Device/dsa-migration)
+     $(Device/uimage-lzma-loader)
+     IMAGE_SIZE := 16064k
+     DEVICE_VENDOR := ZTE
+     DEVICE_MODEL := E8820V2
+     DEVICE_COMPAT_VERSION := 2.0
+     DEVICE_PACKAGES := kmod-mt7603e kmod-mt76x2e kmod-usb2 \
+   	  kmod-usb-ledtrig-usbport luci-app-mtwifi -wpad-openssl
+   endef
+   TARGET_DEVICES += zte_e8820v2
+   ```
 
-[![r1](doc/r1.jpg)](https://item.taobao.com/item.htm?id=721197662185)
+——————————————————————————————————————————————————————————————
+PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中这处字段需要修改：
 
+   ```bash
+   partition@50000 {
+	   			compatible = "denx,uimage";
+		   		label = "firmware";
+		   		reg = <0x50000 0xfb0000>;
+		   	};
 
-## 注意
+   # 将0xfb0000修改为0x1fb0000
+   ```
 
-1. **不要用 root 用户进行编译**
-2. 国内用户编译前最好准备好梯子
-3. 默认登陆IP 192.168.1.1 密码 password
+机型代码修改如下：
 
-## 编译命令
+   ```bash
+   define Device/zte_e8820v2
+     $(Device/dsa-migration)
+     $(Device/uimage-lzma-loader)
+     IMAGE_SIZE := 32448k
+     DEVICE_VENDOR := ZTE
+     DEVICE_MODEL := E8820V2
+     DEVICE_COMPAT_VERSION := 2.0
+     DEVICE_PACKAGES := kmod-mt7603e kmod-mt76x2e kmod-usb2 \
+   	  kmod-usb-ledtrig-usbport luci-app-mtwifi -wpad-openssl
+   endef
+   TARGET_DEVICES += zte_e8820v2
+
+   # 将IMAGE_SIZE的值修改为32448k
+   ```
+——————————————————————————————————————————————————————————————
+
+### 编辑Action库
+
+修改
+
+### 下面进行固件自定义，不推荐直接对.config进行编译，对小白来说很容易没选对依赖，我感觉没有物理机好用。
 
 1. 首先装好 Linux 系统，推荐 Debian 11 或 Ubuntu LTS
 
@@ -40,122 +77,14 @@ I18N: [English](README_EN.md) | [简体中文](README.md)
    vim wget xmlto xxd zlib1g-dev python3-setuptools
    ```
 
-3. 下载源代码，更新 feeds 并选择配置
+3. 下载你修改后的源代码，更新 feeds 并选择配置
 
    ```bash
-   git clone https://github.com/coolsnowwolf/lede
+   git clone https://github.com/yourid/lede
    cd lede
    ./scripts/feeds update -a
    ./scripts/feeds install -a
    make menuconfig
    ```
 
-4. 下载 dl 库，编译固件
-（-j 后面是线程数，第一次编译推荐用单线程）
-
-   ```bash
-   make download -j8
-   make V=s -j1
-   ```
-
-本套代码保证肯定可以编译成功。里面包括了 R23 所有源代码，包括 IPK 的。
-
-你可以自由使用，但源码编译二次发布请注明我的 GitHub 仓库链接。谢谢合作！
-
-二次编译：
-
-```bash
-cd lede
-git pull
-./scripts/feeds update -a
-./scripts/feeds install -a
-make defconfig
-make download -j8
-make V=s -j$(nproc)
-```
-
-如果需要重新配置：
-
-```bash
-rm -rf ./tmp && rm -rf .config
-make menuconfig
-make V=s -j$(nproc)
-```
-
-编译完成后输出路径：bin/targets
-
-### 如果你使用 WSL/WSL2 进行编译
-
-由于 WSL 的 PATH 中包含带有空格的 Windows 路径，有可能会导致编译失败，请在 `make` 前面加上：
-
-```bash
-PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-```
-
-由于默认情况下，装载到 WSL 发行版的 NTFS 格式的驱动器将不区分大小写，因此大概率在 WSL/WSL2 的编译检查中会返回以下错误：
-
-```txt
-Build dependency: OpenWrt can only be built on a case-sensitive filesystem 
-```
-
-一个比较简洁的解决方法是，在 `git clone` 前先创建 Repository 目录，并为其启用大小写敏感：
-
-```powershell
-# 以管理员身份打开终端
-PS > fsutil.exe file setCaseSensitiveInfo <your_local_lede_path> enable
-# 将本项目 git clone 到开启了大小写敏感的目录 <your_local_lede_path> 中
-PS > git clone git@github.com:coolsnowwolf/lede.git <your_local_lede_path>
-```
-
-> 对已经 `git clone` 完成的项目目录执行 `fsutil.exe` 命令无法生效，大小写敏感只对新增的文件变更有效。
-
-### macOS 原生系统进行编译
-
-1. 在 AppStore 中安装 Xcode
-
-2. 安装 Homebrew：
-
-   ```bash
-   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-   ```
-
-3. 使用 Homebrew 安装工具链、依赖与基础软件包:
-
-   ```bash
-   brew unlink awk
-   brew install coreutils diffutils findutils gawk gnu-getopt gnu-tar grep make ncurses pkg-config wget quilt xz
-   brew install gcc@11
-   ```
-
-4. 然后输入以下命令，添加到系统环境变量中：
-
-   ```bash
-   echo 'export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"' >> ~/.bashrc
-   echo 'export PATH="/usr/local/opt/findutils/libexec/gnubin:$PATH"' >> ~/.bashrc
-   echo 'export PATH="/usr/local/opt/gnu-getopt/bin:$PATH"' >> ~/.bashrc
-   echo 'export PATH="/usr/local/opt/gnu-tar/libexec/gnubin:$PATH"' >> ~/.bashrc
-   echo 'export PATH="/usr/local/opt/grep/libexec/gnubin:$PATH"' >> ~/.bashrc
-   echo 'export PATH="/usr/local/opt/gnu-sed/libexec/gnubin:$PATH"' >> ~/.bashrc
-   echo 'export PATH="/usr/local/opt/make/libexec/gnubin:$PATH"' >> ~/.bashrc
-   ```
-
-5. 重新加载一下 shell 启动文件 `source ~/.bashrc`，然后输入 `bash` 进入 bash shell，就可以和 Linux 一样正常编译了
-
-## 特别提示
-
-1. 源代码中绝不含任何后门和可以监控或者劫持你的 HTTPS 的闭源软件， SSL 安全是互联网最后的壁垒。安全干净才是固件应该做到的；
-
-2. 想学习 OpenWrt 开发，但是摸不着门道？自学没毅力？基础太差？怕太难学不会？跟着佐大学 OpenWrt 开发入门培训班助你能学有所成
-报名地址：[点击报名](http://forgotfun.org/2018/04/openwrt-training-2018.html "报名")
-
-3. QCA IPQ60xx 开源仓库地址：<https://github.com/coolsnowwolf/openwrt-gl-ax1800>
-
-4. 存档版本仓库地址：<https://github.com/coolsnowwolf/openwrt>
-
-
-
-## 捐贈
-
-如果你觉得此项目对你有帮助，可以捐助我们，以鼓励项目能持续发展，更加完善
-
- ![star](doc/star.png)
+4. 由于我们是利用Aciton进行云编译，所以在make menuconfig之后，只要把lede文件夹下的.config文件上传到Actions-OpenWrt上就行了，之后就是常规的云编译步骤。
