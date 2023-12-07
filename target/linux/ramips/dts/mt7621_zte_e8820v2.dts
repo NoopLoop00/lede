@@ -10,10 +10,9 @@
 	aliases {
 		led-boot = &led_sys;
 		led-failsafe = &led_sys;
-	};
-
-	chosen {
-		bootargs = "console=ttyS0,115200";
+		led-running = &led_sys;
+		led-upgrade = &led_sys;
+		label-mac-device = &gmac0;
 	};
 
 	leds {
@@ -80,6 +79,26 @@
 				#address-cells = <1>;
 				#size-cells = <1>;
 				read-only;
+
+				eeprom_factory_0: eeprom@0 {
+					reg = <0x0 0x400>;
+				};
+
+				eeprom_factory_8000: eeprom@8000 {
+					reg = <0x8000 0x200>;
+				};
+
+				macaddr_factory_4: macaddr@4 {
+					reg = <0x4 0x6>;
+				};
+
+				macaddr_factory_e000: macaddr@e000 {
+					reg = <0xe000 0x6>;
+				};
+
+				macaddr_factory_e006: macaddr@e006 {
+					reg = <0xe006 0x6>;
+				};
 			};
 
 			partition@50000 {
@@ -100,8 +119,8 @@
 &pcie0 {
 	wifi@0,0 {
 		reg = <0x0000 0 0 0 0>;
-		mediatek,mtd-eeprom = <&factory 0x0000>;
-		mtd-mac-address = <&factory 0xe000>;
+		nvmem-cells = <&eeprom_factory_0>, <&macaddr_factory_e000>;
+		nvmem-cell-names = "eeprom", "mac-address";
 
 		led {
 			led-active-low;
@@ -112,8 +131,8 @@
 &pcie1 {
 	wifi@0,0 {
 		reg = <0x0000 0 0 0 0>;
-		mediatek,mtd-eeprom = <&factory 0x8000>;
-		mtd-mac-address = <&factory 0xe006>;
+		nvmem-cells = <&eeprom_factory_8000>, <&macaddr_factory_e006>;
+		nvmem-cell-names = "eeprom", "mac-address";
 
 		ieee80211-freq-limit = <5000000 6000000>;
 		led {
@@ -125,7 +144,8 @@
 
 
 &gmac0 {
-	mtd-mac-address = <&factory 0xe000>;
+	nvmem-cells = <&macaddr_factory_e000>;
+	nvmem-cell-names = "mac-address";
 };
 
 &switch0 {
@@ -153,7 +173,8 @@
 		port@4 {
 			status = "okay";
 			label = "wan";
-			mtd-mac-address = <&factory 0xe006>;
+			nvmem-cells = <&macaddr_factory_e006>;
+			nvmem-cell-names = "mac-address";
 		};
 	};
 };
