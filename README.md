@@ -33,7 +33,7 @@ PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中�
    partition@50000 {
 	   			compatible = "denx,uimage";
 		   		label = "firmware";
-		   		reg = <0x50000 0xfb0000>;
+		   		reg = <0x50000 0x1fb0000>;
 		   	};
 
    # 将0xfb0000修改为0x1fb0000
@@ -78,9 +78,10 @@ PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中�
   TZ: Asia/Shanghai
 
   # REPO_URL的值修改为你的源码仓库地址
+  # CONFIG_FILE的值修改为你的配置文件命
    ```
 
-### 下面进行固件自定义，不推荐直接对.config进行编译，对小白来说很容易没选对依赖，我感觉没有物理机好用。
+### 下面进行固件自定义，不推荐直接对.config进行编译，对小白来说很容易没选对依赖，我感觉没有虚拟/物理机好用。
 
 1. 首先装好 Linux 系统，推荐 Debian 11 或 Ubuntu LTS
 
@@ -110,4 +111,4 @@ PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中�
 
 附上一份OpenWrt 编译 LuCI -> Applications 添加插件应用说明，https://www.right.com.cn/forum/thread-344825-1-1.html
 
-4. 由于我们是利用Aciton进行云编译，所以在make menuconfig之后，只要把lede文件夹下的.config文件上传到Actions-OpenWrt上并覆盖原文件就行了，之后就是常规的云编译步骤。
+4. 由于我们是利用Aciton进行云编译，所以在make menuconfig之后，只要把lede文件夹下的.config文件上传到Actions-OpenWrt上并覆盖原文件就行了（也可重命名，但重命名后要在build-openwrt.yml重新指定），之后就是常规的云编译步骤。
