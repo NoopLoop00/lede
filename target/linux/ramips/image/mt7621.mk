@@ -1993,6 +1993,6 @@ define Device/zte_e8820v2
   DEVICE_MODEL := E8820V2
   DEVICE_COMPAT_VERSION := 2.0
   DEVICE_PACKAGES := kmod-mt7603e kmod-mt76x2e kmod-usb2 \
-	  kmod-usb-ledtrig-usbport luci-app-mtwifi -wpad-openssl
+	  kmod-usb-ledtrig-usbport
 endef
 TARGET_DEVICES += zte_e8820v2
