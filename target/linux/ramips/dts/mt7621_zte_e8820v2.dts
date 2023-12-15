@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-2.0-or-later OR MIT
+
 #include "mt7621.dtsi"
 
 #include <dt-bindings/gpio/gpio.h>
@@ -7,23 +9,15 @@
 	compatible = "zte,e8820v2", "mediatek,mt7621-soc";
 	model = "ZTE E8820V2";
 
-	aliases {
-		led-boot = &led_sys;
-		led-failsafe = &led_sys;
-		led-running = &led_sys;
-		led-upgrade = &led_sys;
-		label-mac-device = &gmac0;
-	};
-
 	leds {
 		compatible = "gpio-leds";
 
-		led_sys: sys {
-			label = "white:sys";
+		internet {
+			label = "white:internet";
 			gpios = <&gpio 29 GPIO_ACTIVE_LOW>;
 		};
 
-		led_power: power {
+		usb {
 			label = "white:power";
 			gpios = <&gpio 31 GPIO_ACTIVE_LOW>;
 		};
@@ -46,14 +40,19 @@
 	};
 };
 
+&uartlite3 {
+	status = "okay";
+};
+
 &spi0 {
 	status = "okay";
 
 	flash@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
-		spi-max-frequency = <10000000>;
+		spi-max-frequency = <25000000>;
 		broken-flash-reset;
+		m25p,fast-read;
 
 		partitions {
 			compatible = "fixed-partitions";
@@ -73,32 +72,9 @@
 			};
 
 			factory: partition@40000 {
-				compatible = "nvmem-cells";
 				label = "factory";
 				reg = <0x40000 0x10000>;
-				#address-cells = <1>;
-				#size-cells = <1>;
 				read-only;
-
-				eeprom_factory_0: eeprom@0 {
-					reg = <0x0 0x400>;
-				};
-
-				eeprom_factory_8000: eeprom@8000 {
-					reg = <0x8000 0x200>;
-				};
-
-				macaddr_factory_4: macaddr@4 {
-					reg = <0x4 0x6>;
-				};
-
-				macaddr_factory_e000: macaddr@e000 {
-					reg = <0xe000 0x6>;
-				};
-
-				macaddr_factory_e006: macaddr@e006 {
-					reg = <0xe006 0x6>;
-				};
 			};
 
 			partition@50000 {
@@ -119,22 +95,19 @@
 &pcie0 {
 	wifi@0,0 {
 		reg = <0x0000 0 0 0 0>;
-		nvmem-cells = <&eeprom_factory_0>, <&macaddr_factory_e000>;
-		nvmem-cell-names = "eeprom", "mac-address";
+		mediatek,mtd-eeprom = <&factory 0x0000>;
+		mtd-mac-address = <&factory 0xe000>;
 
-		led {
-			led-active-low;
-		};
 	};
 };
 
 &pcie1 {
 	wifi@0,0 {
 		reg = <0x0000 0 0 0 0>;
-		nvmem-cells = <&eeprom_factory_8000>, <&macaddr_factory_e006>;
-		nvmem-cell-names = "eeprom", "mac-address";
-
+		mediatek,mtd-eeprom = <&factory 0x8000>;
+		mtd-mac-address = <&factory 0xe006>;
 		ieee80211-freq-limit = <5000000 6000000>;
+
 		led {
 			led-sources = <2>;
 			led-active-low;
@@ -142,41 +115,31 @@
 	};
 };
 
-
 &gmac0 {
-	nvmem-cells = <&macaddr_factory_e000>;
-	nvmem-cell-names = "mac-address";
+	mtd-mac-address = <&factory 0xe000>;
+};
+
+&gmac1 {
+	mtd-mac-address = <&factory 0xe006>;
+	mtd-mac-address-increment = <1>;
+	status = "okay";
+};
+
+&gsw {
+	mediatek,portmap = "llllw";
+	status = "okay";
+};
+
+&hnat {
+	mtketh-wan = "eth1";
+	mtketh-ppd = "eth0";
+	mtketh-lan = "eth0";
+	mtketh-max-gmac = <2>;
+	/delete-property/ mtkdsa-wan-port;
 };
 
 &switch0 {
-	ports {
-		port@0 {
-			status = "okay";
-			label = "lan1";
-		};
-
-		port@1 {
-			status = "okay";
-			label = "lan2";
-		};
-
-		port@2 {
-			status = "okay";
-			label = "lan3";
-		};
-
-		port@3 {
-			status = "okay";
-			label = "lan4";
-		};
-
-		port@4 {
-			status = "okay";
-			label = "wan";
-			nvmem-cells = <&macaddr_factory_e006>;
-			nvmem-cell-names = "mac-address";
-		};
-	};
+	status = "disabled";
 };
 
 &state_default {
