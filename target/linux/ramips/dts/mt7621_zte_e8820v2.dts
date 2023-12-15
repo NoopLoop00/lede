@@ -124,12 +124,12 @@
 };
 
 &gmac1 {
-	mtd-mac-address = <&factory 0xe000>;
-	mtd-mac-address-increment = <1>;
+	mtd-mac-address = <&factory 0xe006>;
 	status = "okay";
 };
 
 &gsw {
+	mediatek,mdio = <&mdio>;
 	mediatek,portmap = "llllw";
 	status = "okay";
 };
@@ -148,7 +148,7 @@
 
 &state_default {
 	gpio {
-		groups = "jtag", "wdt";
+		groups = "i2c", "jtag", "uart2", "uart3", "wdt";
 		function = "gpio";
 	};
 };
