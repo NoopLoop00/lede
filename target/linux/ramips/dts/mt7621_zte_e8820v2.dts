@@ -9,20 +9,27 @@
 	compatible = "zte,e8820v2", "mediatek,mt7621-soc";
 	model = "ZTE E8820V2";
 
+	aliases {
+		led-boot = &led_sys;
+		led-failsafe = &led_sys;
+		led-running = &led_sys;
+		led-upgrade = &led_sys;
+		label-mac-device = &gmac0;
+	};
+
 	leds {
 		compatible = "gpio-leds";
 
-		internet {
-			label = "white:internet";
+		led_sys: sys {
+			label = "white:sys";
 			gpios = <&gpio 29 GPIO_ACTIVE_LOW>;
 		};
 
-		usb {
+		led_power: power {
 			label = "white:power";
 			gpios = <&gpio 31 GPIO_ACTIVE_LOW>;
 		};
 	};
-
 	keys {
 		compatible = "gpio-keys";
 
@@ -98,7 +105,12 @@
 		mediatek,mtd-eeprom = <&factory 0x0000>;
 		mtd-mac-address = <&factory 0xe000>;
 
+		led {
+			led-active-low;
+		};
+
 	};
+
 };
 
 &pcie1 {
