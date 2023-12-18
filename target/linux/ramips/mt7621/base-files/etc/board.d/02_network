@@ -89,7 +89,7 @@ ramips_setup_interfaces()
 		;;
 	zte,e8820v2)
 		ucidef_add_switch "switch0" \
-			"0:lan" "1:lan" "2:lan" "3:lan" "4:wan" "6u@eth0" "5u@eth1"
+			"0:lan:4" "1:lan:3" "2:lan:2" "3:lan:1" "4:wan:5" "6@eth0"
 		;;
 	oraybox,x3a)
 		ucidef_add_switch "switch0" \
