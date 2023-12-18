@@ -124,6 +124,11 @@
         status = "okay";
 };
 
+&gsw {
+	mediatek,portmap = "llllw";
+	status = "okay";
+};
+
 &hnat {
 	mtketh-wan = "eth1";
 	mtketh-ppd = "eth0";
@@ -133,33 +138,7 @@
 };
 
 &switch0 {
-	ports {
-		port@0 {
-			status = "okay";
-			label = "lan1";
-		};
-
-		port@1 {
-			status = "okay";
-			label = "lan2";
-		};
-
-		port@2 {
-			status = "okay";
-			label = "lan3";
-		};
-
-		port@3 {
-			status = "okay";
-			label = "lan4";
-		};
-
-		port@4 {
-			status = "okay";
-			label = "wan";
-			mtd-mac-address = <&factory 0xe006>;
-		};
-	};
+	status = "disabled";
 };
 
 &state_default {
