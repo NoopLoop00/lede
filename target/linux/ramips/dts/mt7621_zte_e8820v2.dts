@@ -121,6 +121,7 @@
 
 &gmac1 {
 	mtd-mac-address = <&factory 0xe006>;
+        status = "okay";
 };
 
 &hnat {
