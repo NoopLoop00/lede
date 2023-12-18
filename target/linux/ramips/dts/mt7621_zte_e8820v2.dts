@@ -119,6 +119,10 @@
 	mtd-mac-address = <&factory 0xe000>;
 };
 
+&gmac1 {
+	mtd-mac-address = <&factory 0xe006>;
+};
+
 &hnat {
 	mtketh-wan = "eth1";
 	mtketh-ppd = "eth0";
