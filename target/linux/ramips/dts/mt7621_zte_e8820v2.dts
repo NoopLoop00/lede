@@ -17,6 +17,10 @@
 		label-mac-device = &gmac0;
 	};
 
+	chosen {
+		bootargs = "console=ttyS0,115200";
+	};
+
 	leds {
 		compatible = "gpio-leds";
 
@@ -25,11 +29,22 @@
 			gpios = <&gpio 29 GPIO_ACTIVE_LOW>;
 		};
 
-		led_power: power {
+		power {
 			label = "white:power";
 			gpios = <&gpio 31 GPIO_ACTIVE_LOW>;
 		};
+
+		wlan2g {
+			label = "blue:wlan2g";
+			gpios = <&gpio 33 GPIO_ACTIVE_LOW>;
+		};
+
+		wlan5g {
+			label = "blue:wlan5g";
+			gpios = <&gpio 28 GPIO_ACTIVE_LOW>;
+		};
 	};
+
 	keys {
 		compatible = "gpio-keys";
 
