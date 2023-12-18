@@ -119,12 +119,8 @@
 	mtd-mac-address = <&factory 0xe000>;
 };
 
-&gmac1 {
-	mtd-mac-address = <&factory 0xe006>;
-        status = "okay";
-};
-
 &gsw {
+	mediatek,mdio = <&mdio>;
 	mediatek,portmap = "llllw";
 	status = "okay";
 };
@@ -136,7 +132,6 @@
 	mtketh-max-gmac = <2>;
 	/delete-property/ mtkdsa-wan-port;
 };
-
 &switch0 {
 	status = "disabled";
 };
