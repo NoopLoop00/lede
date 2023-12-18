@@ -62,10 +62,6 @@
 	};
 };
 
-&uartlite3 {
-	status = "okay";
-};
-
 &spi0 {
 	status = "okay";
 
@@ -119,11 +115,6 @@
 		reg = <0x0000 0 0 0 0>;
 		mediatek,mtd-eeprom = <&factory 0x0000>;
 		mtd-mac-address = <&factory 0xe000>;
-
-		led {
-			led-active-low;
-		};
-
 	};
 
 };
@@ -134,11 +125,6 @@
 		mediatek,mtd-eeprom = <&factory 0x8000>;
 		mtd-mac-address = <&factory 0xe006>;
 		ieee80211-freq-limit = <5000000 6000000>;
-
-		led {
-			led-sources = <2>;
-			led-active-low;
-		};
 	};
 };
 
