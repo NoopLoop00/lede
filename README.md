@@ -68,6 +68,8 @@ dts https://github.com/siwind/openwrt/tree/master/target/linux/ramips/dts
 	};
 };
 
+# 以上定义led和按键的gpio
+
 &spi0 {
 	status = "okay";
 
@@ -104,11 +106,13 @@ dts https://github.com/siwind/openwrt/tree/master/target/linux/ramips/dts
 			partition@50000 {
 				compatible = "denx,uimage";
 				label = "firmware";
-				reg = <0x50000 0x1fb0000>;
+				reg = <0x50000 0xfb0000>; # fb0000 16M，1fb0000 32M
 			};
 		};
 	};
 };
+
+# 以上定义rom分区
 
 &pcie {
 	status = "okay";
@@ -144,6 +148,8 @@ dts https://github.com/siwind/openwrt/tree/master/target/linux/ramips/dts
 
 };
 
+# 以上定义pcie连接的无线部分
+
 &gmac0 {
 	mtd-mac-address = <&factory 0xe000>;
 };
@@ -164,6 +170,8 @@ dts https://github.com/siwind/openwrt/tree/master/target/linux/ramips/dts
 &switch0 {
 	status = "disabled";
 };
+
+# 以上定义交换机，经过测试e8820v2只支持一个gmac，不知是驱动问题还是硬件限制，目前lede库内d2也只支持一个gmac，但恩山论坛有人给到开源hwnat可以让d2支持两个gmac。不知道谁能解决这个问题。
 
 &state_default {
 	gpio {
@@ -186,9 +194,10 @@ dts https://github.com/siwind/openwrt/tree/master/target/linux/ramips/dts
      DEVICE_MODEL := E8820V2
      DEVICE_COMPAT_VERSION := 2.0
      DEVICE_PACKAGES := kmod-mt7603e kmod-mt76x2e kmod-usb2 \
-   	  kmod-usb-ledtrig-usbport luci-app-mtwifi -wpad-openssl
-   endef
+   	  kmod-usb-ledtrig-usbport 
    TARGET_DEVICES += zte_e8820v2
+
+   # 未添加无线驱动，需自行选择闭源/开源驱动。
    ```
 
 ——————————————————————————————————————————————————————————————
@@ -215,8 +224,7 @@ PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中�
      DEVICE_MODEL := E8820V2
      DEVICE_COMPAT_VERSION := 2.0
      DEVICE_PACKAGES := kmod-mt7603e kmod-mt76x2e kmod-usb2 \
-   	  kmod-usb-ledtrig-usbport luci-app-mtwifi -wpad-openssl
-   endef
+   	  kmod-usb-ledtrig-usbport
    TARGET_DEVICES += zte_e8820v2
 
    # 将IMAGE_SIZE的值修改为32448k
