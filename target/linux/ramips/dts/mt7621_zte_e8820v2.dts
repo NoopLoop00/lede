@@ -33,16 +33,6 @@
 			label = "white:power";
 			gpios = <&gpio 31 GPIO_ACTIVE_LOW>;
 		};
-
-		wlan2g {
-			label = "white:wlan2g";
-			gpios = <&gpio 33 GPIO_ACTIVE_LOW>;
-		};
-
-		wlan5g {
-			label = "white:wlan5g";
-			gpios = <&gpio 28 GPIO_ACTIVE_LOW>;
-		};
 	};
 
 	keys {
@@ -126,6 +116,9 @@
 		mtd-mac-address = <&factory 0xe006>;
 		ieee80211-freq-limit = <5000000 6000000>;
 	};
+	led {
+			led-active-low;
+		};
 };
 
 &gmac0 {
