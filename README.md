@@ -193,11 +193,10 @@ dts https://github.com/siwind/openwrt/tree/master/target/linux/ramips/dts
      DEVICE_VENDOR := ZTE
      DEVICE_MODEL := E8820V2
      DEVICE_COMPAT_VERSION := 2.0
-     DEVICE_PACKAGES := kmod-mt7603e kmod-mt76x2e kmod-usb2 \
-   	  kmod-usb-ledtrig-usbport 
+     DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb2 \
+   	  kmod-usb-ledtrig-usbport kmod-cfg80211 kmod-mac80211
    TARGET_DEVICES += zte_e8820v2
 
-   # 未添加无线驱动，需自行选择闭源/开源驱动。
    ```
 
 ——————————————————————————————————————————————————————————————
@@ -223,8 +222,8 @@ PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中�
      DEVICE_VENDOR := ZTE
      DEVICE_MODEL := E8820V2
      DEVICE_COMPAT_VERSION := 2.0
-     DEVICE_PACKAGES := kmod-mt7603e kmod-mt76x2e kmod-usb2 \
-   	  kmod-usb-ledtrig-usbport
+     DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb2 \
+   	  kmod-usb-ledtrig-usbport kmod-cfg80211 kmod-mac80211
    TARGET_DEVICES += zte_e8820v2
 
    # 将IMAGE_SIZE的值修改为32448k
@@ -251,7 +250,7 @@ PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中�
   TZ: Asia/Shanghai
 
   # REPO_URL的值修改为你的源码仓库地址
-  # CONFIG_FILE的值修改为你的配置文件命
+  # CONFIG_FILE的值修改为你的配置文件名
    ```
 
 ### 下面进行固件自定义，不推荐直接对.config进行编译，对小白来说很容易没选对依赖，我感觉没有虚拟/物理机好用。
