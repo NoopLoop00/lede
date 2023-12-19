@@ -106,7 +106,7 @@ dts https://github.com/siwind/openwrt/tree/master/target/linux/ramips/dts
 			partition@50000 {
 				compatible = "denx,uimage";
 				label = "firmware";
-				reg = <0x50000 0xfb0000>; # fb0000 16M，1fb0000 32M
+				reg = <0x50000 0xfb0000>;
 			};
 		};
 	};
