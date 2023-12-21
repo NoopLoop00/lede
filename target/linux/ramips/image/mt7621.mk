@@ -1993,6 +1993,6 @@ define Device/zte_e8820v2
   DEVICE_MODEL := E8820V2
   DEVICE_COMPAT_VERSION := 2.0
   DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb2 \
-   	  kmod-cfg80211 kmod-mac80211 kmod-usb-storage kmod-usb-storage-extras kmod-fs-ext4 usbutils kmod-nls-base kmod-nls-cp437 kmod-nls-iso8859-1 kmod-nls-utf8
+   	  kmod-cfg80211 kmod-mac80211
 endef
 TARGET_DEVICES += zte_e8820v2
