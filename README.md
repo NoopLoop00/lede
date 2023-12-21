@@ -293,6 +293,9 @@ ramips_setup_macs()
    make menuconfig
    ```
 
-附上一份OpenWrt 编译 LuCI -> Applications 添加插件应用说明，https://www.right.com.cn/forum/thread-344825-1-1.html
+PS：
+OpenWrt编译 LuCI -> Applications 添加插件应用说明 https://www.right.com.cn/forum/thread-344825-1-1.html
+openwrt添加usb功能（不知为何，e8820需要选择usb3） https://www.right.com.cn/FORUM/forum.php?mod=viewthread&tid=3064424
+openwrt支持网卡 http://www.mlapp.cn/1009.html
 
 4. 由于我们是利用Aciton进行云编译，所以在make menuconfig之后，只要把lede文件夹下的.config文件上传到Actions-OpenWrt上并覆盖原文件就行了（也可重命名，但重命名后要在build-openwrt.yml重新指定），之后就是常规的云编译步骤。
