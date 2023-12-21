@@ -223,7 +223,7 @@ PS:如果是硬改的32m的rom，需要修改dts和机型代码，dts文件中�
      DEVICE_MODEL := E8820V2
      DEVICE_COMPAT_VERSION := 2.0
      DEVICE_PACKAGES := kmod-mt7603 kmod-mt76x2 kmod-usb2 \
-   	  kmod-usb-ledtrig-usbport kmod-cfg80211 kmod-mac80211
+   	  kmod-cfg80211 kmod-mac80211
    TARGET_DEVICES += zte_e8820v2
 
    # 将IMAGE_SIZE的值修改为32448k
