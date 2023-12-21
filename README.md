@@ -245,7 +245,7 @@ ramips_setup_macs()
 		wan_mac=$(mtd_get_mac_binary factory 0xe006)
 		;;
 ......
-
+```
 ——————————————————————————————————————————————————————————————
 
 ### 编辑Action库
